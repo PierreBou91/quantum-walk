@@ -1,9 +1,18 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react';
 
+const BASE_URL = () => {
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.PROD_API_BASE_URL;
+  } else {
+    return process.env.DEV_API_BASE_URL;
+  }
+
+}
+
 const Home: NextPage = () => {
 
-  const API_URL = "https://quantum-walk.pbou.dev/api/distance";
+  const API_URL = BASE_URL + "distance";
 
   const [distance, setDistance] = useState(0);
 
