@@ -2,9 +2,5 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
-  padding: 1rem;
-  margin: 0;
-  background: #b5d3f1;
-  border-radius: 0.8rem;
+  gap: 0.3rem;
 }

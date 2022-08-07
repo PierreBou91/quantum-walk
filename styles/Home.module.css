@@ -5,3 +5,8 @@
 	display: flex;
 	justify-content: center;
 }
+
+.lists {
+	display: flex;
+	gap: 1rem;
+}

@@ -2,4 +2,8 @@
 	background: #b5d3f1;
 	border-radius: 0.8rem;
 	color: #0B132B;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 1rem;
 }
