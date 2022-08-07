@@ -1,7 +1,6 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react';
 import Card from '../components/Card';
-import Countdown from '../components/Countdown';
 import StepList from '../components/StepList';
 import styles from '../styles/Home.module.css';
 
@@ -63,7 +62,7 @@ const Home: NextPage = () => {
     <>
       <Card>
         <div className={styles.mainCountdown}>
-          <Countdown distance={distance} />
+          {/* <Countdown distance={distance} /> */}
         </div>
       </Card>
       <StepList>{pastSteps}</StepList>
