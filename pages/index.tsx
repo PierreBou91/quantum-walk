@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 const Home: NextPage = () => {
 
-  const API_URL = "http://localhost:3000/api/distance";
+  const API_URL = "https://quantum-walk.pbou.dev/api/distance";
 
   const [distance, setDistance] = useState(0);
 
