@@ -1,12 +1,9 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react';
-import styles from '../styles/Home.module.css'
-
-
 
 const Home: NextPage = () => {
 
-  const API_URL = "http://192.168.1.15:8080/distance_next";
+  const API_URL = "http://localhost:3000/api/distance";
 
   const [distance, setDistance] = useState(0);
 
@@ -15,7 +12,7 @@ const Home: NextPage = () => {
     await fetch(API_URL)
       .then(res => res.json())
       .then(data => {
-        setDistance(data)
+        setDistance(data.distance);
       }).catch(err => {
         console.log(err)
       }
