@@ -26,11 +26,11 @@ const getPastSteps = () => {
 		dates.push(newDate)
 		obsDate = newDate
 	}
-	return dates
+	return {dates: dates}
 }
 
 const getNextDate = () => {
-	return {nextDate: getPastSteps().pop()}
+	return {nextDate: getPastSteps().dates.pop()}
 }
 
 const getNextSteps = (listSize) => {
