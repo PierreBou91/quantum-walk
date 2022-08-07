@@ -1,0 +1,7 @@
+.mainCountdown {
+	padding-block: 2rem;
+	width: auto;
+	font-size: 3.5rem;
+	display: flex;
+	justify-content: center;
+}

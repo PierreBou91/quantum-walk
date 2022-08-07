@@ -1,5 +1,7 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react';
+import Countdown from '../components/CountDown';
+import styles from '../styles/Home.module.css';
 
 const BASE_URL = () => {
   if (process.env.NODE_ENV === 'production') {
@@ -43,19 +45,10 @@ const Home: NextPage = () => {
 
   return (
     <>
-      {/* TODO Main timer */}
-      {/* TODO List of past/future steps */}
-      {Math.floor(distance / 86400000) +
-        " days : " +
-        Math.floor((distance % 86400000) / 36e5) +
-        " hours : " +
-        Math.floor((distance % 36e5) / 6e4) +
-        " minutes : " +
-        Math.trunc((distance % 6e4) / 1000) +
-        " seconds"}
-      <div>
-        {distance}
+      <div className={styles.mainCountdown}>
+        <Countdown distance={distance} />
       </div>
+      {/* TODO List of past/future steps */}
     </>
   )
 }
