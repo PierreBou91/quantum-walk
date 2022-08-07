@@ -82,18 +82,25 @@ select {
 }
 
 /* Global */
-html{
+html {
   font-family: 'Roboto', sans-serif;
   color: white;
-  background: #1C2541;
+  background: #0B132B;
 }
 
-a{
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 30rem;
+}
+
+a {
   text-decoration: none;
   color: inherit;
 }
 
-.container{
+.container {
   max-width: 1200px;
   margin-inline: auto;
   padding:1rem;

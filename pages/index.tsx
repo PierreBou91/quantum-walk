@@ -61,17 +61,13 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Card>
-        <div className={styles.mainCountdown}>
-          <Countdown distance={distance} />
-        </div>
-      </Card>
-      <Card>
-        <div className={styles.lists}>
-          <StepList>{pastSteps}</StepList>
-          <StepList>{pastSteps}</StepList>
-        </div>
-      </Card>
+      <div className={styles.mainCountdown}>
+        <Countdown distance={distance} />
+      </div>
+      <div className={styles.lists}>
+        <StepList>{pastSteps}</StepList>
+        <StepList>{pastSteps}</StepList>
+      </div>
 
       {/* TODO List of future steps */}
     </>
