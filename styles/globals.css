@@ -88,13 +88,6 @@ html {
   background: #0B132B;
 }
 
-body {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  gap: 30rem;
-}
-
 a {
   text-decoration: none;
   color: inherit;
@@ -104,4 +97,16 @@ a {
   max-width: 1200px;
   margin-inline: auto;
   padding:1rem;
+}
+
+/* .layout {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8rem;
+} */
+
+main {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8rem;
 }

@@ -1,13 +1,11 @@
 import React, { ReactNode } from 'react'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 
 import { MdOutlineNextPlan } from 'react-icons/md'
 import { BsQuestionDiamond } from 'react-icons/bs'
 import { AiOutlineApi, AiFillGithub } from 'react-icons/ai'
 
 import styles from '../styles/Layout.module.css'
-import MainBody from './MainBody'
 import TopNavItem from './TopNavItem'
 
 type Props = {
@@ -46,19 +44,18 @@ const navItems = [
 ]
 
 const Layout = (props: Props) => {
-	const { pathname } = useRouter()
 	return (
 		<>
 			<Head>
 				<title>The Quantum Walk</title>
 			</Head>
 			<main>
+				{/* <div className='layout'> */}
 				<nav className={`${styles.topNav} container`}>
 					{navItems.map(item => <TopNavItem key={item.title} title={item.title} href={item.href} target={item.target} rel={item.rel} icon={item.icon}></TopNavItem>)}
 				</nav>
-				<MainBody>
-					{props.children}
-				</MainBody>
+				{props.children}
+				{/* </div> */}
 			</main>
 		</>
 	)

@@ -1,6 +1,6 @@
 .stepList {
   display: flex;
   flex-direction: column;
-  width: 100%;
   gap: 0.3rem;
+  text-align: center;
 }

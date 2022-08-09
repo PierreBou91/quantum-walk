@@ -20,6 +20,7 @@ const Home: NextPage = () => {
 
   const [distance, setDistance] = useState(0);
   const [pastSteps, setPastSteps] = useState([]);
+  const [listLength, setListLength] = useState(10);
 
   //fetches the distance from the API
   const initialDistanceToNextStep = async () => {
@@ -38,7 +39,7 @@ const Home: NextPage = () => {
     await fetch(PAST_STEP_URL)
       .then(res => res.json())
       .then(data => {
-        setPastSteps(data.dates);
+        setPastSteps(data.dates.reverse());
       }).catch(err => {
         console.log(err)
       }
@@ -59,15 +60,29 @@ const Home: NextPage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  function listLengthUpdate() {
+    setListLength(listLength => listLength + 10);
+  }
+
+  //filter the past steps to only show the last n steps
+  const pastStepsFiltered = pastSteps.filter((step, index) => {
+    return index < listLength;
+  });
+
   return (
     <>
-      <div className={styles.mainCountdown}>
+      {/* <div className='container layout'> */}
+      <div className={`${styles.mainCountdown} container`}>
         <Countdown distance={distance} />
       </div>
-      <div className={styles.lists}>
-        <StepList>{pastSteps}</StepList>
+      <div className={`container ${styles.lists}`}>
+        <div>
+          <StepList>{pastStepsFiltered}</StepList>
+          <button className={styles.button} onClick={listLengthUpdate} > More </button>
+        </div>
         <StepList>{pastSteps}</StepList>
       </div>
+      {/* </div> */}
 
       {/* TODO List of future steps */}
     </>

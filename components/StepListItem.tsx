@@ -12,7 +12,7 @@ const StepListItem = (props: Props) => {
 	const timeString = date.toLocaleTimeString()
 
 	return (
-		<li className={styles.stepList}>{dateString} {timeString}</li>
+		<li className={styles.stepListItem}>{dateString} {timeString}</li>
 	)
 }
 
