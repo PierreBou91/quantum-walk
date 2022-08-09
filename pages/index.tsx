@@ -1,13 +1,18 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react';
-import Card from '../components/Card';
 import Countdown from '../components/Countdown';
 import StepList from '../components/StepList';
 import styles from '../styles/Home.module.css';
 
+//get current page url
+
 const BASE_URL = () => {
   if (process.env.NODE_ENV === 'production') {
-    return process.env.NEXT_PUBLIC_PROD_API_BASE_URL;
+    if (typeof window !== 'undefined') {
+      const url = window.location.href
+      return url + "/api/";
+    }
+    return process.env.NEXT_PUBLIC_PROD_API_BASE_URL
   } else {
     return process.env.NEXT_PUBLIC_DEV_API_BASE_URL;
   }
