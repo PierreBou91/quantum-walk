@@ -4,4 +4,11 @@
   align-items: center;
   font-size: 1rem;
   flex-wrap: wrap;
+  border-bottom: 0.1rem;
+  border-bottom-style:solid;
+  position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+  background: #0B132B;
+  width: 100vw;
 }

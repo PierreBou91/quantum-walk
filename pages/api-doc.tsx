@@ -4,7 +4,7 @@ type Props = {}
 
 const apiDoc = (props: Props) => {
 	return (
-		<div>apiDoc</div>
+		<div>api documentations</div>
 	)
 }
 

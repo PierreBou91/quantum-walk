@@ -84,8 +84,24 @@ select {
 /* Global */
 html {
   font-family: 'Roboto', sans-serif;
-  color: white;
   background: #0B132B;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8rem;
+  color: #dedede;
+}
+
+h1, h2, h3 {
+  text-transform:uppercase;
+}
+
+h1 {
+  background: -webkit-linear-gradient(45deg, #d12948, #851bd0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 a {
@@ -99,8 +115,3 @@ a {
   padding:1rem;
 }
 
-main {
-  display: flex;
-  flex-direction: column;
-  row-gap: 8rem;
-}

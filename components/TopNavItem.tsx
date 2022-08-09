@@ -16,7 +16,7 @@ const TopNavItem = (props: Props) => {
 			<>
 				{props.icon}
 				<Link key={props.title} href={props.href}>
-					<a className={""} target={props.target} rel={props.rel} >
+					<a target={props.target} rel={props.rel} >
 						{props.title}
 					</a>
 				</Link>

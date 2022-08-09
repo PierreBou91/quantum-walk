@@ -1,9 +1,8 @@
 .stepListItem {
 	display: flex;
   flex-direction: column;
-  width: 100%;
   padding: 0.5rem;
-  background: #687a8c;
-  border-radius: 0.8rem;
+  border-radius: 0.3rem;
   color: white;
+  background: -webkit-linear-gradient(45deg, #687a8c, #0B132B 50%);
 }

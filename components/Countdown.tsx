@@ -5,7 +5,7 @@ type Props = {
 }
 
 const Countdown = (props: Props) => {
-	return (<div>
+	return (<h1>
 		{
 			Math.floor(props.distance / 86400000) +
 			" days " +
@@ -16,7 +16,7 @@ const Countdown = (props: Props) => {
 			Math.trunc((props.distance % 6e4) / 1000) +
 			" seconds"
 		}
-	</div >
+	</h1 >
 	)
 }
 

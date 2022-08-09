@@ -1,7 +1,10 @@
 .mainCountdown {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
 	padding-block: 2rem;
 	width: auto;
-	font-size: 3.5rem;
+	font-size: clamp(0.5rem, 1.5rem, 1.5rem);
 	display: flex;
 	justify-content: center;
 }
@@ -17,8 +20,13 @@
 	background: #0B132B;
 	color: white;
 	border-radius: 0.8rem;
-	font-size: 1.5rem;
 	font-weight: bold;
 	cursor: pointer;
 	margin-block: 0.5rem;
+}
+
+@media (max-width: 540px) {
+	.lists {
+		flex-direction: column;
+	}
 }

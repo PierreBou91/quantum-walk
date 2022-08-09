@@ -4,15 +4,19 @@ import styles from "../styles/StepList.module.css"
 
 type Props = {
 	children: number[]
+	label?: string
 }
 
 const StepList = (props: Props) => {
 	return (
-		<ul role="list" className={styles.stepList}>
-			{props.children?.map((timestamp) => {
-				return <StepListItem key={timestamp}>{timestamp}</StepListItem>
-			})}
-		</ul>
+		<>
+			<h2>{props.label}</h2>
+			<ul role="list" className={styles.stepList}>
+				{props.children?.map((timestamp) => {
+					return <StepListItem key={timestamp}>{timestamp}</StepListItem>
+				})}
+			</ul>
+		</>
 	)
 }
 

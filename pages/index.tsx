@@ -98,15 +98,16 @@ const Home: NextPage = () => {
   return (
     <>
       <div className={`${styles.mainCountdown} container`}>
+        Next Quantum step in
         <Countdown distance={distance} />
       </div>
       <div className={`container ${styles.lists}`}>
         <div>
-          <StepList>{pastStepsFiltered}</StepList>
+          <StepList label="Previous steps">{pastStepsFiltered}</StepList>
           <button className={styles.button} onClick={pastListLengthUpdate} > More </button>
         </div>
         <div>
-          <StepList>{futureSteps}</StepList>
+          <StepList label="Future steps">{futureSteps}</StepList>
           <button className={styles.button} onClick={futureListLengthUpdate} > More </button>
         </div>
       </div>
