@@ -8,7 +8,7 @@ const hashDate = (date) => {
 }
 
 const hashToInterval = (hash) => {
-	return parseInt(hash,16) % MAX_INTERVAL;
+	return parseInt(hash, 16) % MAX_INTERVAL;
 }
 
 const getNextStep = (date) => {
@@ -26,15 +26,36 @@ const getPastSteps = () => {
 		dates.push(newDate)
 		obsDate = newDate
 	}
-	return {dates: dates}
+
+	dates.reverse().shift()
+
+	//convert to readable format
+	// dates = dates.map(date => {
+	// 	const dateObj = new Date(date)
+	// 	return {
+	// 		date: dateObj.toLocaleDateString(),
+	// 		time: dateObj.toLocaleTimeString()
+	// 	}
+	// })
+
+	return { dates: dates }
 }
 
 const getNextDate = () => {
-	return {nextDate: getPastSteps().dates.pop()}
+	const now = new Date().getTime()
+	let obsDate = STARTDATE
+	let dates = [STARTDATE]
+	while (obsDate < now) {
+		const newDate = getNextStep(obsDate)
+		dates.push(newDate)
+		obsDate = newDate
+	}
+
+	return { nextDate: dates.pop() }
 }
 
 const getNextSteps = (listSize) => {
-	const next = getNextDate()
+	const next = getNextDate().nextDate;
 	let obsDate = next
 	let dates = [next]
 	for (let i = 0; i < listSize; i++) {
@@ -42,12 +63,12 @@ const getNextSteps = (listSize) => {
 		dates.push(newDate)
 		obsDate = newDate
 	}
-	return dates
+	return { dates: dates }
 }
 
 const getDistance = (date) => {
 	const now = new Date().getTime();
-	return {distance: date.nextDate - now};
+	return { distance: date.nextDate - now };
 }
 
 exports.getNextDate = getNextDate;

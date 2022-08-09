@@ -4,8 +4,6 @@ import Countdown from '../components/Countdown';
 import StepList from '../components/StepList';
 import styles from '../styles/Home.module.css';
 
-//get current page url
-
 const BASE_URL = () => {
   if (process.env.NODE_ENV === 'production') {
     if (typeof window !== 'undefined') {
@@ -20,15 +18,19 @@ const BASE_URL = () => {
 
 const Home: NextPage = () => {
 
-  const DISTANCE_URL = BASE_URL() + "distance";
-  const PAST_STEP_URL = BASE_URL() + "past-steps";
 
   const [distance, setDistance] = useState(0);
   const [pastSteps, setPastSteps] = useState([]);
-  const [listLength, setListLength] = useState(10);
+  const [futureSteps, setFutureSteps] = useState([]);
+  const [pastListLength, setpastListLength] = useState(10);
+  const [futureListLength, setfutureListLength] = useState(9);
 
-  //fetches the distance from the API
-  const initialDistanceToNextStep = async () => {
+  const DISTANCE_URL = BASE_URL() + "distance";
+  const PAST_STEPS_URL = BASE_URL() + "past-steps";
+  const FUTURE_STEPS_URL = BASE_URL() + "future-steps?size=" + futureListLength;
+
+  //fetch the distance from the API
+  const fetchInitialDistanceToNextStep = async () => {
     await fetch(DISTANCE_URL)
       .then(res => res.json())
       .then(data => {
@@ -39,12 +41,24 @@ const Home: NextPage = () => {
       );
   }
 
-  //fetches the past steps from the API
-  const initialPastSteps = async () => {
-    await fetch(PAST_STEP_URL)
+  //fetch the past steps from the API
+  const fetchInitialPastSteps = async () => {
+    await fetch(PAST_STEPS_URL)
       .then(res => res.json())
       .then(data => {
-        setPastSteps(data.dates.reverse());
+        setPastSteps(data.dates);
+      }).catch(err => {
+        console.log(err)
+      }
+      );
+  }
+
+  //fetch the future steps from the API
+  const fetchFutureSteps = async () => {
+    await fetch(FUTURE_STEPS_URL)
+      .then(res => res.json())
+      .then(data => {
+        setFutureSteps(data.dates);
       }).catch(err => {
         console.log(err)
       }
@@ -53,9 +67,10 @@ const Home: NextPage = () => {
 
   // runs the fetch function when the component is mounted
   useEffect(() => {
-    initialDistanceToNextStep();
-    initialPastSteps();
-  }, []);
+    fetchInitialDistanceToNextStep();
+    fetchInitialPastSteps();
+    fetchFutureSteps();
+  }, [futureListLength]);
 
   // updates the state every second
   useEffect(() => {
@@ -65,31 +80,36 @@ const Home: NextPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  function listLengthUpdate() {
-    setListLength(listLength => listLength + 10);
+  // sets the past steps list length
+  function pastListLengthUpdate() {
+    setpastListLength(pastListLength => pastListLength + 10);
+  }
+
+  // sets the future steps list length
+  function futureListLengthUpdate() {
+    setfutureListLength(futureListLength => futureListLength + 10);
   }
 
   //filter the past steps to only show the last n steps
   const pastStepsFiltered = pastSteps.filter((step, index) => {
-    return index < listLength;
+    return index < pastListLength;
   });
 
   return (
     <>
-      {/* <div className='container layout'> */}
       <div className={`${styles.mainCountdown} container`}>
         <Countdown distance={distance} />
       </div>
       <div className={`container ${styles.lists}`}>
         <div>
           <StepList>{pastStepsFiltered}</StepList>
-          <button className={styles.button} onClick={listLengthUpdate} > More </button>
+          <button className={styles.button} onClick={pastListLengthUpdate} > More </button>
         </div>
-        <StepList>{pastSteps}</StepList>
+        <div>
+          <StepList>{futureSteps}</StepList>
+          <button className={styles.button} onClick={futureListLengthUpdate} > More </button>
+        </div>
       </div>
-      {/* </div> */}
-
-      {/* TODO List of future steps */}
     </>
   )
 }
