@@ -1,34 +1,7 @@
-.mainHeader {
-  background: #0B132B;
-  height:auto;
-}
-
-.quantumWalk {
-  font-size: 1.5rem;
-}
-
-.mainNav {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-  padding-bottom:0;
-}
-
-.mainNavItems {
-  min-width: 6rem;
+.topNav {
   display: flex;
   justify-content: center;
-}
-
-.currentPage {
-  background: #3A506B;
-  border-top-left-radius: 0.8rem;
-  border-top-right-radius: 0.8rem;
-  padding-inline: 1rem;
-  padding-block: 0.5rem;
-}
-
-.mainNavItems:hover:not(.currentPage) {
-  color:#efe06b;
+  align-items: center;
+  font-size: 1rem;
+  flex-wrap: wrap;
 }
