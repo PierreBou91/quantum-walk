@@ -50,12 +50,10 @@ const Layout = (props: Props) => {
 				<title>The Quantum Walk</title>
 			</Head>
 			<main>
-				{/* <div className='layout'> */}
 				<nav className={`${styles.topNav} container`}>
 					{navItems.map(item => <TopNavItem key={item.title} title={item.title} href={item.href} target={item.target} rel={item.rel} icon={item.icon}></TopNavItem>)}
 				</nav>
 				{props.children}
-				{/* </div> */}
 			</main>
 		</>
 	)

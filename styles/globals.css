@@ -95,15 +95,9 @@ a {
 
 .container {
   max-width: 1200px;
-  margin-inline: auto;
+  margin-inline:auto;
   padding:1rem;
 }
-
-/* .layout {
-  display: flex;
-  flex-direction: column;
-  row-gap: 8rem;
-} */
 
 main {
   display: flex;

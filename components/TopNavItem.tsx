@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import React, { ReactNode } from 'react'
 import styles from '../styles/TopNavItem.module.css'
-import { IconType } from 'react-icons'
 
 type Props = {
 	title: string
