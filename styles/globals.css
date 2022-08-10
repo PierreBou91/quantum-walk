@@ -100,6 +100,7 @@ h1, h2, h3 {
 
 h1 {
   background: -webkit-linear-gradient(45deg, #d12948, #851bd0);
+  background-clip: border-box;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
