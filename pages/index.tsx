@@ -3,6 +3,13 @@ import { useEffect, useState } from 'react';
 import Countdown from '../components/Countdown';
 import StepList from '../components/StepList';
 import styles from '../styles/Home.module.css';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
 
 const BASE_URL = () => {
   if (process.env.NODE_ENV === 'production') {
@@ -19,6 +26,7 @@ const BASE_URL = () => {
 const Home: NextPage = () => {
 
 
+
   const [distance, setDistance] = useState(0);
   const [pastSteps, setPastSteps] = useState([]);
   const [futureSteps, setFutureSteps] = useState([]);
@@ -28,6 +36,17 @@ const Home: NextPage = () => {
   const DISTANCE_URL = BASE_URL() + "distance";
   const PAST_STEPS_URL = BASE_URL() + "past-steps";
   const FUTURE_STEPS_URL = BASE_URL() + "future-steps?size=" + futureListLength;
+
+  const queryClient = useQueryClient()
+  const query = useQuery('distance', async () => {
+    const response = await fetch(DISTANCE_URL);
+    if (!response.ok) {
+      throw new Error('Error while fetching distance ' + response.status);
+    }
+    const data = await response.json();
+    return data;
+  })
+
 
   //fetch the distance from the API
   const fetchInitialDistanceToNextStep = async () => {

@@ -1,4 +1,7 @@
 {
 	"editor.defaultFormatter": "vscode.typescript-language-features",
-	"editor.formatOnSave": true
+	"editor.formatOnSave": true,
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	}
 }
