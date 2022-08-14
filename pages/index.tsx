@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Countdown from '../components/Countdown';
 import StepList from '../components/StepList';
 import styles from '../styles/Home.module.css';
@@ -26,13 +26,13 @@ const BASE_URL = () => {
 const Home: NextPage = () => {
 
   const [distance, setDistance] = useState<number>(0);
-  const [futureSteps, setFutureSteps] = useState([]);
   const [pastListLength, setpastListLength] = useState(10);
-  const [futureListLength, setfutureListLength] = useState(9);
+  // const [futureListLength, setfutureListLength] = useState(9);
+  const futureListLength = useRef(9);
 
   const DISTANCE_URL = BASE_URL() + "distance";
   const PAST_STEPS_URL = BASE_URL() + "past-steps";
-  const FUTURE_STEPS_URL = BASE_URL() + "future-steps?size=" + futureListLength;
+  const FUTURE_STEPS_URL = BASE_URL() + "future-steps?size=" + futureListLength.current;
 
   // const queryClient = useQueryClient()
   useQuery('distance', async () => {
@@ -65,24 +65,18 @@ const Home: NextPage = () => {
     }
   });
 
-  // useQuery('future-steps', async () => {
-
-  //fetch the future steps from the API
-  const fetchFutureSteps = async () => {
-    await fetch(FUTURE_STEPS_URL)
-      .then(res => res.json())
-      .then(data => {
-        setFutureSteps(data.dates);
-      }).catch(err => {
-        console.log(err)
-      }
-      );
-  }
-
-  // runs the fetch function when the component is mounted
-  useEffect(() => {
-    fetchFutureSteps();
-  }, [futureListLength]);
+  const future = useQuery('future-steps', async () => {
+    const response = await fetch(FUTURE_STEPS_URL);
+    if (!response.ok) {
+      throw new Error('Error while fetching future steps ' + response.status);
+    }
+    const data = await response.json();
+    return data;
+  }, {
+    onError(error: any) {
+      console.log("there was an error" + error);
+    }
+  });
 
   // updates the state every second
   useEffect(() => {
@@ -99,8 +93,10 @@ const Home: NextPage = () => {
 
   // sets the future steps list length
   function futureListLengthUpdate() {
-    setfutureListLength(futureListLength => futureListLength + 10);
-  }
+    futureListLength.current += 10;
+    console.log(futureListLength.current);
+    future.refetch(); // TODO Make the refetch work on first button click
+  };
 
   //filter the past steps to only show the last n steps
   const pastStepsFiltered = pasts.data?.dates.filter((_: any, index: number) => {
@@ -119,7 +115,7 @@ const Home: NextPage = () => {
           <button className={styles.button} onClick={pastListLengthUpdate} > More </button>
         </div>
         <div>
-          <StepList label="Future steps">{futureSteps}</StepList>
+          <StepList label="Future steps">{future.data?.dates}</StepList>
           <button className={styles.button} onClick={futureListLengthUpdate} > More </button>
         </div>
       </div>
