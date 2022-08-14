@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from "../styles/Countdown.module.css"
 
 type Props = {
@@ -6,24 +6,25 @@ type Props = {
 }
 
 const Countdown = (props: Props) => {
-	return (<h1 className={styles.clockText}><div >{Math.floor(props.distance / 86400000) +
+
+	const [distance, setDistance] = useState(props.distance);
+
+	// updates the state every second
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setDistance(distance => distance - 1000);
+		}, 1000);
+		return () => clearInterval(interval);
+	}, []);
+
+	return (<h1 className={styles.clockText}><div >{Math.floor(distance / 86400000) +
 		" days"}</div>
-		<div>&nbsp;{Math.floor((props.distance % 86400000) / 36e5) +
+		<div>&nbsp;{Math.floor((distance % 86400000) / 36e5) +
 			" hours"}</div>
-		<div>&nbsp;{Math.floor((props.distance % 36e5) / 6e4) +
+		<div>&nbsp;{Math.floor((distance % 36e5) / 6e4) +
 			" minutes"}</div>
-		<div>&nbsp;{Math.trunc((props.distance % 6e4) / 1000) +
+		<div>&nbsp;{Math.trunc((distance % 6e4) / 1000) +
 			" seconds"}</div>
-		{/* {
-			Math.floor(props.distance / 86400000) +
-			" days " +
-			Math.floor((props.distance % 86400000) / 36e5) +
-			" hours " +
-			Math.floor((props.distance % 36e5) / 6e4) +
-			" minutes " +
-			Math.trunc((props.distance % 6e4) / 1000) +
-			" seconds"
-		} */}
 	</h1 >
 	)
 }

@@ -1,14 +1,10 @@
 import type { NextPage } from 'next'
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Countdown from '../components/Countdown';
 import StepList from '../components/StepList';
 import styles from '../styles/Home.module.css';
 import {
   useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
 } from 'react-query'
 
 const BASE_URL = () => {
@@ -25,17 +21,15 @@ const BASE_URL = () => {
 
 const Home: NextPage = () => {
 
-  const [distance, setDistance] = useState<number>(0);
   const [pastListLength, setpastListLength] = useState(10);
-  // const [futureListLength, setfutureListLength] = useState(9);
   const futureListLength = useRef(9);
 
   const DISTANCE_URL = BASE_URL() + "distance";
   const PAST_STEPS_URL = BASE_URL() + "past-steps";
-  const FUTURE_STEPS_URL = BASE_URL() + "future-steps?size=" + futureListLength.current;
+  const FUTURE_STEPS_URL = BASE_URL() + "future-steps?size=";
 
   // const queryClient = useQueryClient()
-  useQuery('distance', async () => {
+  const distance = useQuery('distance', async () => {
     const response = await fetch(DISTANCE_URL);
     if (!response.ok) {
       throw new Error('Error while fetching distance ' + response.status);
@@ -43,10 +37,6 @@ const Home: NextPage = () => {
     const data = await response.json();
     return data;
   }, {
-    onSuccess(data: any) {
-      setDistance(data.distance);
-
-    },
     onError(error: any) {
       console.log("there was an error" + error);
     }
@@ -66,7 +56,7 @@ const Home: NextPage = () => {
   });
 
   const future = useQuery('future-steps', async () => {
-    const response = await fetch(FUTURE_STEPS_URL);
+    const response = await fetch(FUTURE_STEPS_URL + futureListLength.current);
     if (!response.ok) {
       throw new Error('Error while fetching future steps ' + response.status);
     }
@@ -77,14 +67,6 @@ const Home: NextPage = () => {
       console.log("there was an error" + error);
     }
   });
-
-  // updates the state every second
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDistance(distance => distance - 1000);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   // sets the past steps list length
   function pastListLengthUpdate() {
@@ -107,7 +89,7 @@ const Home: NextPage = () => {
     <>
       <div className={`${styles.mainCountdown} container`}>
         Next Quantum step in
-        <Countdown distance={distance} />
+        {distance.isLoading ? <div>Loading...</div> : <Countdown distance={distance.data.distance} />}
       </div>
       <div className={`container ${styles.lists}`}>
         <div>
