@@ -25,10 +25,7 @@ const BASE_URL = () => {
 
 const Home: NextPage = () => {
 
-
-
-  const [distance, setDistance] = useState(0);
-  const [pastSteps, setPastSteps] = useState([]);
+  const [distance, setDistance] = useState<number>(0);
   const [futureSteps, setFutureSteps] = useState([]);
   const [pastListLength, setpastListLength] = useState(10);
   const [futureListLength, setfutureListLength] = useState(9);
@@ -37,40 +34,38 @@ const Home: NextPage = () => {
   const PAST_STEPS_URL = BASE_URL() + "past-steps";
   const FUTURE_STEPS_URL = BASE_URL() + "future-steps?size=" + futureListLength;
 
-  const queryClient = useQueryClient()
-  const query = useQuery('distance', async () => {
+  // const queryClient = useQueryClient()
+  useQuery('distance', async () => {
     const response = await fetch(DISTANCE_URL);
     if (!response.ok) {
       throw new Error('Error while fetching distance ' + response.status);
     }
     const data = await response.json();
     return data;
-  })
+  }, {
+    onSuccess(data: any) {
+      setDistance(data.distance);
 
+    },
+    onError(error: any) {
+      console.log("there was an error" + error);
+    }
+  });
 
-  //fetch the distance from the API
-  const fetchInitialDistanceToNextStep = async () => {
-    await fetch(DISTANCE_URL)
-      .then(res => res.json())
-      .then(data => {
-        setDistance(data.distance);
-      }).catch(err => {
-        console.log(err)
-      }
-      );
-  }
+  const pasts = useQuery('past-steps', async () => {
+    const response = await fetch(PAST_STEPS_URL);
+    if (!response.ok) {
+      throw new Error('Error while fetching past steps ' + response.status);
+    }
+    const data = await response.json();
+    return data;
+  }, {
+    onError(error: any) {
+      console.log("there was an error" + error);
+    }
+  });
 
-  //fetch the past steps from the API
-  const fetchInitialPastSteps = async () => {
-    await fetch(PAST_STEPS_URL)
-      .then(res => res.json())
-      .then(data => {
-        setPastSteps(data.dates);
-      }).catch(err => {
-        console.log(err)
-      }
-      );
-  }
+  // useQuery('future-steps', async () => {
 
   //fetch the future steps from the API
   const fetchFutureSteps = async () => {
@@ -86,8 +81,6 @@ const Home: NextPage = () => {
 
   // runs the fetch function when the component is mounted
   useEffect(() => {
-    fetchInitialDistanceToNextStep();
-    fetchInitialPastSteps();
     fetchFutureSteps();
   }, [futureListLength]);
 
@@ -110,7 +103,7 @@ const Home: NextPage = () => {
   }
 
   //filter the past steps to only show the last n steps
-  const pastStepsFiltered = pastSteps.filter((step, index) => {
+  const pastStepsFiltered = pasts.data?.dates.filter((_: any, index: number) => {
     return index < pastListLength;
   });
 
