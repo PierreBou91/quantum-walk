@@ -1,8 +1,11 @@
 import type { NextPage } from 'next'
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import Countdown from '../components/Countdown';
 import StepList from '../components/StepList';
 import styles from '../styles/Home.module.css';
+import {
+  useQuery,
+} from 'react-query'
 
 const BASE_URL = () => {
   if (process.env.NODE_ENV === 'production') {
@@ -18,67 +21,52 @@ const BASE_URL = () => {
 
 const Home: NextPage = () => {
 
-
-  const [distance, setDistance] = useState(0);
-  const [pastSteps, setPastSteps] = useState([]);
-  const [futureSteps, setFutureSteps] = useState([]);
   const [pastListLength, setpastListLength] = useState(10);
-  const [futureListLength, setfutureListLength] = useState(9);
+  const futureListLength = useRef(9);
 
   const DISTANCE_URL = BASE_URL() + "distance";
   const PAST_STEPS_URL = BASE_URL() + "past-steps";
-  const FUTURE_STEPS_URL = BASE_URL() + "future-steps?size=" + futureListLength;
+  const FUTURE_STEPS_URL = BASE_URL() + "future-steps?size=";
 
-  //fetch the distance from the API
-  const fetchInitialDistanceToNextStep = async () => {
-    await fetch(DISTANCE_URL)
-      .then(res => res.json())
-      .then(data => {
-        setDistance(data.distance);
-      }).catch(err => {
-        console.log(err)
-      }
-      );
-  }
+  // const queryClient = useQueryClient()
+  const distance = useQuery('distance', async () => {
+    const response = await fetch(DISTANCE_URL);
+    if (!response.ok) {
+      throw new Error('Error while fetching distance ' + response.status);
+    }
+    const data = await response.json();
+    return data;
+  }, {
+    onError(error: any) {
+      console.log("there was an error" + error);
+    }
+  });
 
-  //fetch the past steps from the API
-  const fetchInitialPastSteps = async () => {
-    await fetch(PAST_STEPS_URL)
-      .then(res => res.json())
-      .then(data => {
-        setPastSteps(data.dates);
-      }).catch(err => {
-        console.log(err)
-      }
-      );
-  }
+  const pasts = useQuery('past-steps', async () => {
+    const response = await fetch(PAST_STEPS_URL);
+    if (!response.ok) {
+      throw new Error('Error while fetching past steps ' + response.status);
+    }
+    const data = await response.json();
+    return data;
+  }, {
+    onError(error: any) {
+      console.log("there was an error" + error);
+    }
+  });
 
-  //fetch the future steps from the API
-  const fetchFutureSteps = async () => {
-    await fetch(FUTURE_STEPS_URL)
-      .then(res => res.json())
-      .then(data => {
-        setFutureSteps(data.dates);
-      }).catch(err => {
-        console.log(err)
-      }
-      );
-  }
-
-  // runs the fetch function when the component is mounted
-  useEffect(() => {
-    fetchInitialDistanceToNextStep();
-    fetchInitialPastSteps();
-    fetchFutureSteps();
-  }, [futureListLength]);
-
-  // updates the state every second
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDistance(distance => distance - 1000);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  const future = useQuery('future-steps', async () => {
+    const response = await fetch(FUTURE_STEPS_URL + futureListLength.current);
+    if (!response.ok) {
+      throw new Error('Error while fetching future steps ' + response.status);
+    }
+    const data = await response.json();
+    return data;
+  }, {
+    onError(error: any) {
+      console.log("there was an error" + error);
+    }
+  });
 
   // sets the past steps list length
   function pastListLengthUpdate() {
@@ -87,11 +75,13 @@ const Home: NextPage = () => {
 
   // sets the future steps list length
   function futureListLengthUpdate() {
-    setfutureListLength(futureListLength => futureListLength + 10);
-  }
+    futureListLength.current += 10;
+    console.log(futureListLength.current);
+    future.refetch(); // TODO Make the refetch work on first button click
+  };
 
   //filter the past steps to only show the last n steps
-  const pastStepsFiltered = pastSteps.filter((step, index) => {
+  const pastStepsFiltered = pasts.data?.dates.filter((_: any, index: number) => {
     return index < pastListLength;
   });
 
@@ -99,7 +89,7 @@ const Home: NextPage = () => {
     <>
       <div className={`${styles.mainCountdown} container`}>
         Next Quantum step in
-        <Countdown distance={distance} />
+        {distance.isLoading ? <div>Loading...</div> : <Countdown distance={distance.data.distance} />}
       </div>
       <div className={`container ${styles.lists}`}>
         <div>
@@ -107,7 +97,7 @@ const Home: NextPage = () => {
           <button className={styles.button} onClick={pastListLengthUpdate} > More </button>
         </div>
         <div>
-          <StepList label="Future steps">{futureSteps}</StepList>
+          <StepList label="Future steps">{future.data?.dates}</StepList>
           <button className={styles.button} onClick={futureListLengthUpdate} > More </button>
         </div>
       </div>
